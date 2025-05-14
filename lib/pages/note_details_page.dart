@@ -78,6 +78,11 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
       }
     }
 
+    void clearNote() {
+      noteTitleController.clear();
+      noteDescriptionController.clear();
+    }
+
     void updateTitle() {
       widget.noteModel.title = noteTitleController.text;
     }
@@ -191,7 +196,9 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                   SizedBox(width: 10),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        clearNote();
+                      },
                       child: Container(
                         height: 45,
                         decoration: BoxDecoration(
@@ -200,7 +207,7 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
                         ),
                         child: Center(
                           child: Text(
-                            "Delete",
+                            "Clear",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
