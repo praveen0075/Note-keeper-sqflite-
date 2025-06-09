@@ -20,22 +20,10 @@ class _NoteAddPageState extends State<NoteAddPage> {
 
   int notePriority = 2;
   String stringPriority = "Low";
-  // String? title;
-  // String? desc;
 
   @override
   Widget build(BuildContext context) {
     List<String> _priorities = ["High", "Low"];
-
-    // String updatePriorityToString(String val){
-    //   if (val == "High") {
-    //     stringPriority = _priorities[0];
-    //     return _priorities[0];
-    //   } else {
-    //     stringPriority = _priorities[1];
-    //     return _priorities[1];
-    //   }
-    // }
 
     void updatePriority(String val) {
       if (val == "High") {
@@ -63,20 +51,15 @@ class _NoteAddPageState extends State<NoteAddPage> {
         final title = titleController.text;
         final desc = descriptionController.text;
         final date = DateFormat.yMMMd().format(DateTime.now());
-        log(id.toString());
-        log(date);
         final note = NoteModel(id, title, desc, date, notePriority);
         int result = await DatabaseHelper().insertNote(note);
         if (result != 0) {
           _goBackScreen();
-          log(notePriority.toString());
-          log(stringPriority);
 
           _showSnackBar("Note Saved Successfully", Colors.green);
         } else {
           _showSnackBar("Some thing went wrong", Colors.red);
         }
-        // final note = NoteModel(id, title, desc, date, notePriority);
       } else {}
     }
 
@@ -104,10 +87,8 @@ class _NoteAddPageState extends State<NoteAddPage> {
                     }).toList(),
                 value: stringPriority,
                 onChanged: (newValue) {
-                  log("new value ${newValue.toString()}");
                   log(notePriority.toString());
                   setState(() {
-                    log("drop down selected item is $newValue");
                     updatePriority(newValue!);
                   });
                 },
@@ -128,14 +109,13 @@ class _NoteAddPageState extends State<NoteAddPage> {
                   labelText: "Title",
                   border: OutlineInputBorder(),
                 ),
-                // onChanged: (newValue) {
-                //   titleController.text = newValue;
-                // },
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
+                minLines: 5,
+                maxLines: 45,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter a description";
@@ -148,9 +128,6 @@ class _NoteAddPageState extends State<NoteAddPage> {
                   labelText: "Description",
                   border: OutlineInputBorder(),
                 ),
-                // onChanged: (newValue) {
-                //   descriptionController.text = newValue;
-                // },
               ),
             ),
 

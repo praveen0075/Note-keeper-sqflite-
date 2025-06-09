@@ -48,7 +48,7 @@ class DatabaseHelper {
     log(path);
     var noteDatabase = await openDatabase(
       path,
-      version: 1, 
+      version: 1,
       onCreate: _createDb,
     );
     return noteDatabase;

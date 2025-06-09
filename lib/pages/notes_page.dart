@@ -58,7 +58,7 @@ class _NotespageState extends State<Notespage> {
     int result = await databaseHelper.deleteNote(note.id);
     if (result != 0) {
       _updateNotelist();
-      _showSnackBar("Successfully deleted the note", 0);
+      _showSnackBar("You have deleted the note", 1);
     } else {
       _showSnackBar("Failed to delete the note", 1);
     }
@@ -73,37 +73,69 @@ class _NotespageState extends State<Notespage> {
     );
   }
 
+  void _showDialog(NoteModel note) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text("Are you sure?", textAlign: TextAlign.center),
+
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    deleteNoteFromNoteList(note);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Delete", style: TextStyle(color: Colors.red)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel"),
+                ),
+              ],
+            ),
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NoteAddPage(pageTitle: "Add Note"),
+      floatingActionButton: SizedBox(
+        width: 100,
+        child: FloatingActionButton(
+          backgroundColor: Colors.black,
+          onPressed: () async {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NoteAddPage(pageTitle: "Add Note"),
+              ),
+            );
+            if (result == true) {
+              _updateNotelist();
+            }
+          },
+          isExtended: true,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("New", style: TextStyle(color: Colors.white)),
+                Icon(Icons.add, color: Colors.white),
+              ],
             ),
-          );
-          // final note = NoteModel(
-          //   DateTime.timestamp().millisecondsSinceEpoch,
-          //   "Dummy Note",
-          //   "No description",
-          //   DateTime.now().toString(),
-          //   1,
-          // );
-          // await databaseHelper.insertNote(note);
-          if (result == true) {
-            _updateNotelist();
-          }
-        },
-        shape: CircleBorder(),
-        backgroundColor: Colors.black,
-        child: Icon(Icons.add, color: Colors.white),
+          ),
+        ),
       ),
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Notes",
+          "Note keeper",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.black,
@@ -160,7 +192,8 @@ class _NotespageState extends State<Notespage> {
                 subtitle: Text(note.date),
                 trailing: IconButton(
                   onPressed: () {
-                    deleteNoteFromNoteList(note);
+                    _showDialog(note);
+                    // deleteNoteFromNoteList(note);
                   },
                   icon: Icon(Icons.delete),
                 ),

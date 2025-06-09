@@ -148,6 +148,8 @@ class _NoteDetailsPageState extends State<NoteDetailsPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
+                minLines: 5,
+                maxLines: 45,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter a description";
